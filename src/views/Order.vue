@@ -50,8 +50,9 @@
             <hr />
             <div class="btn d-flex justify-content-between" v-if="paySuccess === false">
               <a
-                href="#/"
+                href="#"
                 class="btn-custom2 hvr-shutter-out-horizontal"
+                @click.prevent="goIndex"
                 ><i class="bi bi-reply-fill"></i>回首頁</a
               >
               <a href="#" class="btn-custom hvr-bounce-to-right" @click.prevent="pay"
@@ -60,8 +61,9 @@
             </div>
             <div class="btn text-center" v-else>
               <a
-                href="#/"
+                href="#"
                 class="btn-custom2 hvr-shutter-out-horizontal"
+                @click.prevent="goIndex"
                 ><i class="bi bi-reply-fill"></i>回首頁</a
               >
             </div>
@@ -99,6 +101,9 @@ export default {
         this.paySuccess = true
         this.isLoading = false
       })
+    },
+    goIndex () {
+      this.$router.push('/')
     }
   },
 

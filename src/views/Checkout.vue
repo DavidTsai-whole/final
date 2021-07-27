@@ -81,7 +81,7 @@
               <a href="#/cart" class="btn-custom2 hvr-shutter-out-horizontal my-2"
                 >上一步</a
               >
-              <a href="#" class="btn-custom hvr-bounce-to-right my-2 not-allowed" disabled @click.prevent="toOrder">下一步</a>
+              <a href="#" class="btn-custom hvr-bounce-to-right my-2 not-allowed" @click.prevent="toOrder">下一步</a>
             </div>
           </Form>
         </div>
