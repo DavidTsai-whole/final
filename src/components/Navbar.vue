@@ -60,17 +60,20 @@
 </template>
 
 <script>
-/* import { reactive } from '@vue/reactivity'
-import { watch } from '@vue/runtime-core'
-import { useRoute } from 'vue-router' */
+// import { reactive } from '@vue/reactivity'
+// import { watch } from '@vue/runtime-core'
+// import { useRoute } from 'vue-router'
 
 export default {
+  /* setup () {
+    const route = useRoute()
+    watch(route(to), () => {
+    })
+    return {
 
-  /* watch(route(to), () => {
-      if (to.path !== '/') {
+    }
+  } */
 
-      }
-    }) */
   data () {
     return {
       classList: {},
