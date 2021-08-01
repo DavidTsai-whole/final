@@ -1,12 +1,13 @@
+import Swal from 'sweetalert2'
 export function sweetalert2 (res) {
   if (res.data.success) {
-    this.$swal({
+    Swal.fire({
       icon: 'success',
       title: res.data.message,
       confirmButtonText: '了解'
     })
   } else {
-    this.$swal({
+    Swal.fire({
       icon: 'error',
       title: res.data.message,
       confirmButtonText: '了解'
@@ -14,7 +15,7 @@ export function sweetalert2 (res) {
   }
 }
 export function sweetalert (res) {
-  this.$swal({
+  Swal.fire({
     icon: 'success',
     title: res,
     confirmButtonText: '了解'

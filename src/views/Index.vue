@@ -86,8 +86,29 @@
 </template>
 
 <script>
+import { reactive } from '@vue/reactivity'
+import { inject, onMounted } from '@vue/runtime-core'
 export default {
-  data () {
+  setup () {
+    const classList = reactive({
+      bg: '',
+      text: ''
+    })
+    const mitt = inject('mitt')
+    onMounted(() => {
+      window.addEventListener('scroll', () => {
+        if (scrollY > 0) {
+          classList.bg = 'bg-orange'
+          classList.text = 'text-primary'
+        } else {
+          classList.bg = ''
+          classList.text = ''
+        }
+      })
+      mitt.emit('pushNavbar', classList)
+    })
+  }
+  /* data () {
     return {
       classList: {
         bg: '',
@@ -107,6 +128,6 @@ export default {
       }
     })
     this.emitter.emit('pushNavbar', this.classList)
-  }
+  } */
 }
 </script>

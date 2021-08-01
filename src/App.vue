@@ -4,12 +4,17 @@
 
 <script>
 import emitter from '@/methods/mitt'
+import { provide } from '@vue/runtime-core'
 export default {
-  provide () {
+
+  setup () {
+    provide('mitt', emitter)
+  }
+  /* provide () {
     return {
       emitter
     }
-  }
+  } */
 }
 </script>
 

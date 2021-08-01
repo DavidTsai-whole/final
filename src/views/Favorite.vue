@@ -6,10 +6,10 @@
       <div class="row d-flex justify-content-center">
         <div class="col-lg-6 col-md-8">
           <h2 class="fw-bold mb-5 text-center">願望清單</h2>
-          <div class="wish" v-if="favoriteData.length !==0">
+          <div class="wish" v-if="favoriteData.data.length !==0">
           <div
             class="wishCard d-flex bg-orange mb-2"
-            v-for="item in favoriteProduct"
+            v-for="item in favoriteProduct.data"
             :key="item.id"
           >
             <img :src="item.imageUrl" alt="" />
@@ -45,8 +45,69 @@
 </template>
 
 <script>
+import { reactive, ref } from '@vue/reactivity'
+import { inject, onMounted } from '@vue/runtime-core'
+import { useSweetalert, useSweetalert2 } from '../composition-api'
 export default {
-  data () {
+  setup () {
+    const favoriteData = reactive({
+      data: JSON.parse(localStorage.getItem('favorite')) || []
+    })
+
+    const products = reactive({
+      data: []
+    })
+    const favoriteProduct = reactive({
+      data: []
+    })
+    const isLoading = ref(false)
+    const axios = inject('axios')
+    const mitt = inject('mitt')
+
+    const getProduct = () => {
+      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/products/all`
+      axios.get(api).then(res => {
+        products.data = res.data.products
+        getFevorite()
+      })
+    }
+    const getFevorite = () => {
+      favoriteProduct.data = products.data.filter(item => {
+        return favoriteData.data.indexOf(item.id) > -1
+      })
+    }
+    const deleteItem = (id) => {
+      const followId = favoriteData.data.indexOf(id)
+      favoriteData.data.splice(followId, 1)
+      getFevorite()
+      useSweetalert('已取消追蹤')
+      localStorage.setItem('favorite', JSON.stringify(favoriteData.data))
+    }
+    const addCart = (item) => {
+      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/cart`
+      isLoading.value = true
+      const data = {
+        product_id: item.id,
+        qty: 1
+      }
+      axios.post(api, { data: data }).then(res => {
+        useSweetalert2(res)
+        mitt.emit('update-cart')
+        isLoading.value = false
+      })
+    }
+    onMounted(() => {
+      getProduct()
+    })
+    return {
+      isLoading,
+      deleteItem,
+      addCart,
+      favoriteData,
+      favoriteProduct
+    }
+  }
+  /* data () {
     return {
       favoriteData: JSON.parse(localStorage.getItem('favorite')) || [],
       products: [],
@@ -89,6 +150,6 @@ export default {
   },
   created () {
     this.getProduct()
-  }
+  } */
 }
 </script>

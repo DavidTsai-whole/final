@@ -3,7 +3,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header bg-danger text-white">
-          <h5 class="modal-title">刪除 {{data.title}}</h5>
+          <h5 class="modal-title">刪除 {{}}</h5>
 
           <button
             type="button"
@@ -13,7 +13,7 @@
           ></button>
         </div>
         <div class="modal-body">
-          <p>確定要刪除 {{data.title}}?</p>
+          <p>確定要刪除 {{}}?</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">

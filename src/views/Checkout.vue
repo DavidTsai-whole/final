@@ -81,7 +81,7 @@
               <a href="#/cart" class="btn-custom2 hvr-shutter-out-horizontal my-2"
                 >上一步</a
               >
-              <a href="#" class="btn-custom hvr-bounce-to-right my-2 not-allowed" @click.prevent="toOrder">下一步</a>
+              <a href="#" class="btn-custom hvr-bounce-to-right my-2" @click.prevent="toOrder">下一步</a>
             </div>
           </Form>
         </div>
@@ -91,7 +91,7 @@
             <hr class="bg-dark" style="opacity: 1" />
             <div
               class="orderDetail py-1 d-flex align-items-center"
-              v-for="item in carts"
+              v-for="item in carts.data"
               :key="item.id"
             >
               <img :src="item.product.imageUrl" alt="" />
@@ -145,8 +145,86 @@
 </template>
 
 <script>
+import { reactive, ref } from '@vue/reactivity'
+import { inject, onMounted } from '@vue/runtime-core'
+import { useSweetalert2 } from '../composition-api'
+import { useRouter } from 'vue-router'
 export default {
-  data () {
+  setup () {
+    const carts = reactive({
+      data: []
+    })
+    const isLoading = ref(false)
+    const totalPrice = ref(0)
+    const coupon = ref('')
+    const salePrice = ref(0)
+    const form = reactive({
+      user: {
+        name: '',
+        email: '',
+        tel: '',
+        address: ''
+      }
+    })
+    const router = useRouter()
+    const mitt = inject('mitt')
+    const axios = inject('axios')
+    const getCart = () => {
+      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/cart`
+      isLoading.value = true
+      axios.get(api).then(res => {
+        carts.data = res.data.data.carts
+        getTotalPrice()
+        isLoading.value = false
+      })
+    }
+    const getTotalPrice = () => {
+      totalPrice.value = 0
+      carts.data.forEach(item => {
+        totalPrice.value += item.total
+      })
+    }
+    const sendCoupon = () => {
+      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/coupon`
+      isLoading.value = true
+      const data = {
+        code: coupon.value
+      }
+      axios.post(api, { data }).then(res => {
+        if (res.data.success) {
+          useSweetalert2(res)
+          isLoading.value = false
+          salePrice.value = res.data.data.final_total
+        } else {
+          useSweetalert2(res)
+          isLoading.value = false
+        }
+      })
+    }
+    const toOrder = () => {
+      isLoading.value = true
+      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/order`
+      axios.post(api, { data: form }).then(res => {
+        isLoading.value = false
+        mitt.emit('update-cart')
+        router.push(`/order/${res.data.orderId}`)
+      })
+    }
+    onMounted(() => {
+      getCart()
+    })
+    return {
+      sendCoupon,
+      toOrder,
+      carts,
+      totalPrice,
+      salePrice,
+      form,
+      isLoading,
+      coupon
+    }
+  }
+  /* data () {
     return {
       carts: [],
       isLoading: false,
@@ -209,6 +287,6 @@ export default {
   },
   created () {
     this.getCart()
-  }
+  } */
 }
 </script>

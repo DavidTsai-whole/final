@@ -84,7 +84,7 @@
                       <i class="bi bi-cart" ></i>
                       <span>加入購物車</span>
                     </li>
-                    <li v-if="favoriteData.indexOf(item.id) === -1" @click.stop="addFavorite(item.id)">
+                    <li v-if="favoriteData.data.indexOf(item.id) === -1" @click.stop="addFavorite(item.id)">
                       <i class="bi bi-heart"></i>
                       <span>追蹤商品</span>
                     </li>
@@ -116,8 +116,150 @@
 </template>
 
 <script>
+import { reactive, ref } from '@vue/reactivity'
+import { computed, inject, onMounted } from '@vue/runtime-core'
+import { useSweetalert, useSweetalert2 } from '../composition-api'
+import { useRouter } from 'vue-router'
 export default {
-  data () {
+  setup () {
+    const products = reactive({
+      data: []
+    })
+    const isLoading = ref(false)
+    const category = ref('all')
+    const selected = ref('1')
+    const filterText = ref('')
+    const favoriteData = reactive({
+      data: JSON.parse(localStorage.getItem('favorite')) || []
+    })
+    const router = useRouter()
+    const mitt = inject('mitt')
+    const axios = inject('axios')
+    const getProducts = () => {
+      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/products/all`
+      isLoading.value = true
+      axios.get(api).then(res => {
+        isLoading.value = false
+        products.data = res.data.products
+      })
+    }
+    const addCart = (item) => {
+      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/cart`
+      isLoading.value = true
+      const cartData = {
+        product_id: item.id,
+        qty: 1
+      }
+      isLoading.value = true
+      axios.post(api, { data: cartData }).then(res => {
+        useSweetalert2(res)
+        mitt.emit('update-cart')
+        isLoading.value = false
+      })
+    }
+    const productDetail = (item) => {
+      router.push(`/product/${item.id}`)
+    }
+    const addFavorite = (id) => {
+      const followId = favoriteData.data.indexOf(id)
+      if (followId === -1) {
+        favoriteData.data.push(id)
+        useSweetalert('已加入追蹤')
+      } else {
+        favoriteData.data.splice(followId, 1)
+        useSweetalert('已取消追蹤')
+      }
+      localStorage.setItem('favorite', JSON.stringify(favoriteData.data))
+      mitt.emit('update-favorite')
+    }
+    const filterProduct = computed(() => {
+      const newFilter = []
+      if (category.value === 'all') {
+        return products.data
+          .filter(item => {
+            return item.title.match(filterText.value)
+          })
+          .sort((a, b) => {
+            if (selected.value === '2') {
+              return a.price - b.price
+            }
+            if (selected.value === '3') {
+              return b.price - a.price
+            }
+          })
+      } else if (category.value === 'burger') {
+        products.data.forEach(item => {
+          if (item.category === '漢堡') {
+            newFilter.push(item)
+          }
+        })
+        return newFilter
+          .sort((a, b) => {
+            if (selected.value === '2') {
+              return a.price - b.price
+            }
+            if (selected.value === '3') {
+              return b.price - a.price
+            }
+          })
+          .filter(item => {
+            return item.title.match(filterText.value)
+          })
+      } else if (category.value === 'dessert') {
+        products.data.forEach(item => {
+          if (item.category === '點心') {
+            newFilter.push(item)
+          }
+        })
+        return newFilter
+          .sort((a, b) => {
+            if (selected.value === '2') {
+              return a.price - b.price
+            }
+            if (selected.value === '3') {
+              return b.price - a.price
+            }
+          })
+          .filter(item => {
+            return item.title.match(filterText.value)
+          })
+      } else {
+        products.data.forEach(item => {
+          if (item.category === '飲品') {
+            newFilter.push(item)
+          }
+        })
+        return newFilter
+          .sort((a, b) => {
+            if (selected.value === '2') {
+              return a.price - b.price
+            }
+            if (selected.value === '3') {
+              return b.price - a.price
+            }
+          })
+          .filter(item => {
+            return item.title.match(filterText.value)
+          })
+      }
+    })
+    onMounted(() => {
+      getProducts()
+    })
+
+    return {
+      isLoading,
+      addCart,
+      productDetail,
+      addFavorite,
+      filterProduct,
+      category,
+      filterText,
+      selected,
+      favoriteData
+    }
+  }
+  /* data () {
     return {
       products: [],
       isLoading: false,
@@ -246,6 +388,6 @@ export default {
   },
   created () {
     this.getProducts()
-  }
+  } */
 }
 </script>

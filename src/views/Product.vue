@@ -8,31 +8,31 @@
             <li class="breadcrumb-item"><a href="#/">首頁</a></li>
             <li class="breadcrumb-item"><a href="#/products">商品列表</a></li>
             <li class="breadcrumb-item active fw-bold" aria-current="page">
-              {{ product.title }}
+              {{ product.data.title }}
             </li>
           </ol>
         </nav>
         <div class="col-lg-6">
-          <img :src="product.imageUrl" alt="" />
+          <img :src="product.data.imageUrl" alt="" />
         </div>
         <div class="col-lg-6">
-          <h2 class="fw-bold mt-lg-0 mt-2">{{ product.title }}</h2>
+          <h2 class="fw-bold mt-lg-0 mt-2">{{ product.data.title }}</h2>
           <hr class="bg-dark" />
-          <h4 class="category d-inline-block text-white">{{ product.category }}</h4>
+          <h4 class="category d-inline-block text-white">{{ product.data.category }}</h4>
           <div class="price text-end mt-5">
-            <del>NT ${{ product.origin_price }}</del>
-            <span class="fs-4 text-primary ms-2 fw-bold">NT ${{ product.price }}</span>
+            <del>NT ${{ product.data.origin_price }}</del>
+            <span class="fs-4 text-primary ms-2 fw-bold">NT ${{ product.data.price }}</span>
           </div>
-          <select class="form-select my-3" v-model="product.num" aria-label="Default select example">
+          <select class="form-select my-3" v-model="product.data.num" aria-label="Default select example">
             <option :value="num" v-for="num in 10" :key="num">
-              選購{{ num }}{{ product.unit }}
+              選購{{ num }}{{ product.data.unit }}
             </option>
           </select>
           <div class="btn d-flex justify-content-between">
             <a href="#/products" class="btn-custom2 hvr-shutter-out-horizontal my-2"
               ><i class="bi bi-reply-fill"></i>繼續購物</a
             >
-            <a href="#" @click.prevent="addCart(product.id)" class="btn-custom hvr-bounce-to-right my-2"
+            <a href="#" @click.prevent="addCart(product.data.id)" class="btn-custom hvr-bounce-to-right my-2"
               ><i class="bi bi-cart"></i>加入購物車</a
             >
           </div>
@@ -75,7 +75,7 @@
               role="tabpanel"
               aria-labelledby="nav-home-tab"
             >
-              {{product.content}}
+              {{product.data.content}}
             </div>
             <div
               class="tab-pane fade"
@@ -108,7 +108,7 @@
               }
             }'
            >
-            <swiper-slide v-for="item in maybeProduct" :key="item.id" @click="goProduct(item.id)">
+            <swiper-slide v-for="item in maybeProduct.data" :key="item.id" @click="goProduct(item.id)">
                 <img :src="item.imageUrl" alt="" />
                 <div class="imgHover">
                 <h3 class="fw-bold text-primary">More</h3>
@@ -128,10 +128,88 @@ import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/swiper.scss'
 import 'swiper/components/navigation/navigation.scss'
 import 'swiper/components/pagination/pagination.scss'
+import { reactive, ref } from '@vue/reactivity'
+import { inject, onMounted } from '@vue/runtime-core'
+import { useRoute, useRouter } from 'vue-router'
+import { useSweetalert2 } from '../composition-api'
 SwiperCore.use([Navigation, Pagination, Autoplay])
 
 export default {
-  data () {
+  components: {
+    Swiper,
+    SwiperSlide
+  },
+  setup () {
+    const product = reactive({
+      data: {}
+    })
+    const isLoading = ref(false)
+    const products = reactive({
+      data: []
+    })
+    const maybeProduct = reactive({
+      data: []
+    })
+    const route = useRoute()
+    const router = useRouter()
+    const axios = inject('axios')
+    const mitt = inject('mitt')
+    const getProducts = () => {
+      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/products/all`
+      axios.get(api).then(res => {
+        products.data = res.data.products
+        setTimeout(() => {
+          products.data.forEach(item => {
+            if (item.category === product.data.category) {
+              maybeProduct.data.push(item)
+            }
+          })
+        }, 100)
+      })
+    }
+    const getDetail = (id) => {
+      id = route.params.id
+      isLoading.value = true
+      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/product/${id}`
+      axios.get(api).then(res => {
+        product.data = res.data.product
+        isLoading.value = false
+        getProducts()
+        product.data.num = 1
+      })
+    }
+    const addCart = (id) => {
+      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/cart`
+      isLoading.value = true
+      const data = {
+        product_id: id,
+        qty: product.data.num
+      }
+      axios.post(api, { data: data }).then(res => {
+        useSweetalert2(res)
+        mitt.emit('update-cart')
+        getDetail()
+        isLoading.value = false
+      })
+    }
+    const goProduct = (id) => {
+      router.push(`/product/${id}`)
+      setTimeout(() => {
+        getDetail()
+      }, 10)
+    }
+    onMounted(() => {
+      getDetail()
+    })
+    return {
+      addCart,
+      goProduct,
+      product,
+      maybeProduct,
+      isLoading
+    }
+  }
+  /* data () {
     return {
       product: {},
       isLoading: false,
@@ -194,6 +272,6 @@ export default {
   },
   created () {
     this.getDetail()
-  }
+  } */
 }
 </script>
