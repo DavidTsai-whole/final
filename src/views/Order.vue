@@ -18,26 +18,27 @@
             <ul class="list-unstyled">
               <li class="d-flex justify-content-between mb-1">
                 <span class="fs-5 fw-bold">顧客姓名</span>
-                <span class="fs-5 fw-bold">{{ order.data.user.name }}</span>
+                <span class="fs-5 fw-bold"></span>
               </li>
               <li class="d-flex justify-content-between mb-1">
                 <span class="fs-5 fw-bold">電子信箱</span>
-                <span class="fs-5 fw-bold">{{ order.data.user.email }}</span>
+                <span class="fs-5 fw-bold"></span>
               </li>
               <li class="d-flex justify-content-between mb-1">
                 <span class="fs-5 fw-bold">聯絡方式</span>
-                <span class="fs-5 fw-bold">{{ order.data.user.tel }}</span>
+                <span class="fs-5 fw-bold"></span>
               </li>
               <li class="d-flex justify-content-between">
                 <span class="fs-5 fw-bold">送達地址</span>
-                <span class="fs-5 fw-bold">{{ order.data.user.address }}</span>
+                <span class="fs-5 fw-bold"></span>
               </li>
             </ul>
             <hr />
             <ul class="list-unstyled">
               <li class="d-flex justify-content-between mb-1">
                 <span class="fs-5 fw-bold">付款金額</span>
-                <span class="fs-5 fw-bold">${{ Math.round(order.data.total + 80) }}</span>
+                <span v-if="order.data.total < 599" class="fs-5 fw-bold">${{ Math.round(order.data.total + 80) }}</span>
+                <span v-else class="fs-5 fw-bold">${{ Math.round(order.data.total) }}</span>
               </li>
               <li class="d-flex justify-content-between">
                 <span class="fs-5 fw-bold">付款狀態</span>
@@ -87,15 +88,7 @@ export default {
     const route = useRoute()
     const router = useRouter()
     const axios = inject('axios')
-    const getOrder = id => {
-      isLoading.value = true
-      id = route.params.id
-      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/order/${id}`
-      axios.get(api).then(res => {
-        isLoading.value = false
-        order.data = res.data.order
-      })
-    }
+
     const pay = id => {
       isLoading.value = true
       const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/pay/${id}`
@@ -109,7 +102,14 @@ export default {
     }
 
     onMounted(() => {
-      getOrder()
+      isLoading.value = true
+      const id = route.params.id
+      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/order/${id}`
+      axios.get(api).then(res => {
+        isLoading.value = false
+        order.data = res.data.order
+        console.log(order.data.user.name)
+      })
     })
 
     return {

@@ -9,7 +9,7 @@
         :class="classList.data.text"
         >CHILLBURGER</router-link
       >
-      <ul class="menu d-flex list-unstyled fw-bold fs-5 mb-0" :class="{active:isLoading}">
+      <ul class="menu d-flex list-unstyled fw-bold fs-5 mb-0" @click="toggleIcon" :class="{active:isLoading}">
         <li>
           <router-link to="/products"><i class="bi bi-grid-fill"></i> 商品列表</router-link>
         </li>
