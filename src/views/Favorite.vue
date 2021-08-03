@@ -107,49 +107,5 @@ export default {
       favoriteProduct
     }
   }
-  /* data () {
-    return {
-      favoriteData: JSON.parse(localStorage.getItem('favorite')) || [],
-      products: [],
-      favoriteProduct: [],
-      isLoading: false
-    }
-  },
-  methods: {
-    getProduct () {
-      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/products/all`
-      this.$http.get(api).then((res) => {
-        this.products = res.data.products
-        this.getFevorite()
-      })
-    },
-    getFevorite () {
-      this.favoriteProduct = this.products.filter((item) => {
-        return this.favoriteData.indexOf(item.id) > -1
-      })
-    },
-    deleteItem (id) {
-      const followId = this.favoriteData.indexOf(id)
-      this.favoriteData.splice(followId, 1)
-      this.getFevorite()
-      this.$sweetalert('已取消追蹤')
-      localStorage.setItem('favorite', JSON.stringify(this.favoriteData))
-    },
-    addCart (item) {
-      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/cart`
-      this.isLoading = true
-      const data = {
-        product_id: item.id,
-        qty: 1
-      }
-      this.$http.post(api, { data: data }).then((res) => {
-        this.$sweetalert2(res)
-        this.isLoading = false
-      })
-    }
-  },
-  created () {
-    this.getProduct()
-  } */
 }
 </script>

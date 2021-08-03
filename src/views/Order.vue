@@ -18,19 +18,19 @@
             <ul class="list-unstyled">
               <li class="d-flex justify-content-between mb-1">
                 <span class="fs-5 fw-bold">顧客姓名</span>
-                <span class="fs-5 fw-bold"></span>
+                <span v-if="order.data.length !== 0" class="fs-5 fw-bold">{{order.data.user.name}}</span>
               </li>
               <li class="d-flex justify-content-between mb-1">
                 <span class="fs-5 fw-bold">電子信箱</span>
-                <span class="fs-5 fw-bold"></span>
+                <span v-if="order.data.length !== 0" class="fs-5 fw-bold">{{order.data.user.email}}</span>
               </li>
               <li class="d-flex justify-content-between mb-1">
                 <span class="fs-5 fw-bold">聯絡方式</span>
-                <span class="fs-5 fw-bold"></span>
+                <span v-if="order.data.length !== 0" class="fs-5 fw-bold">{{order.data.user.tel}}</span>
               </li>
               <li class="d-flex justify-content-between">
                 <span class="fs-5 fw-bold">送達地址</span>
-                <span class="fs-5 fw-bold"></span>
+                <span v-if="order.data.length !== 0" class="fs-5 fw-bold">{{order.data.user.address}}</span>
               </li>
             </ul>
             <hr />
@@ -79,6 +79,7 @@
 import { reactive, ref } from '@vue/reactivity'
 import { useRoute, useRouter } from 'vue-router'
 import { inject, onMounted } from '@vue/runtime-core'
+import { useSweetalert } from '../composition-api'
 export default {
   setup () {
     const order = reactive({
@@ -94,6 +95,7 @@ export default {
       const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/pay/${id}`
       axios.post(api).then(res => {
         order.data.is_paid = true
+        useSweetalert('付款成功!')
         isLoading.value = false
       })
     }
@@ -119,37 +121,5 @@ export default {
       isLoading
     }
   }
-  /* data () {
-    return {
-      order: [],
-      isLoading: false
-    }
-  },
-  methods: {
-    getOrder (id) {
-      id = this.$route.params.id
-      this.isLoading = true
-      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/order/${id}`
-      this.$http.get(api).then((res) => {
-        this.isLoading = false
-        this.order = res.data.order
-      })
-    },
-    pay (id) {
-      this.isLoading = true
-      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/pay/${id}`
-      this.$http.post(api).then((res) => {
-        this.order.is_paid = true
-        this.isLoading = false
-      })
-    },
-    goIndex () {
-      this.$router.push('/')
-    }
-  },
-
-  created () {
-    this.getOrder()
-  } */
 }
 </script>

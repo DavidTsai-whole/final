@@ -1,14 +1,10 @@
-body {
-    .active {
-        overflow-y: hidden;
-    }
-}
 .nav {
-    height: 80px;
-    transition: 0.3s;
-    .menu {
-        transition: 0.3s;
-        @include media-breakpoint-down(lg) {
+  height: 80px;
+  transition: 0.3s;
+  .menu {
+    /*transition: 0.3s;
+        z-index: 100;
+         @include media-breakpoint-down(lg) {
             position: fixed;
             flex-direction: column;
             padding-top: 70px;
@@ -17,103 +13,151 @@ body {
             background: $primary;
             height: 100vh;
             width: 250px;
-        }
-        a {
-            padding: 10px 10px;
-            display: block;
-            transition: all 0.3s;
-            &:hover {
-                color: $primary;
-            }
-            @include media-breakpoint-down(lg) {
-                &:hover {
-                    background: $orange;
-                }
-                
-            }
-        }
-        &.active {
-            right:0;
-        }
-    }
-    .menu-icon {
-        position: relative;
-        a {
-            transition: all 0.3s;
-            &:hover {
-                color: $primary;
-            }
-        }
-        .cartNum {
-            position: absolute;
-            font-size: 10px;
-            background: $primary;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color:$white;
-            top:0px;
-            left:13px
-        }
-        .favoriteNum {
-            position: absolute;
-            font-size: 10px;
-            background: $primary;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color:$white;
-            top:0px;
-            right:-5px
-        }
-        
-    }
-    .menu-toggle {
-        position: relative;
-        cursor: pointer;
-        width: 22px;
-        height: 22px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: transparent;
-
-        &::before {
-            content: "";
-            position: absolute;
-            width: 22px;
-            height: 2px;
-            background: $white;
-            transform: translateY(-8px);
-            transition: 0.3s;
-            box-shadow: 0 8px 0 $white;
-        }
-        &::after {
-            content: "";
-            position: absolute;
-            width: 22px;
-            height: 2px;
-            background: $white;
-            transition: 0.3s;
-            transform: translateY(8px);
-        }
-        &.active {
-            &::before {
-                transform: rotate(45deg);
-                box-shadow: 0 0 0 $white;
-            }
-            &::after {
-                transform: rotate(-45deg);
-            }
-        }
+        } */
+    a {
+      padding: 10px 10px;
+      display: block;
+      transition: all 0.3s;
+      &:hover {
+        color: $primary;
+      }
     }
     &.active {
-        background: $orange;
+      right: 0;
     }
+  }
+  .menu-icon {
+    position: relative;
+    a {
+      transition: all 0.3s;
+      &:hover {
+        color: $primary;
+      }
+    }
+    .cartNum {
+      position: absolute;
+      font-size: 10px;
+      background: $primary;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: $white;
+      top: 0px;
+      left: 13px;
+    }
+    .favoriteNum {
+      position: absolute;
+      font-size: 10px;
+      background: $primary;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: $white;
+      top: 0px;
+      right: -5px;
+    }
+  }
+  .menu-toggle {
+    position: relative;
+    cursor: pointer;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    z-index: 101;
+
+    &::before {
+      content: "";
+      position: absolute;
+      width: 22px;
+      height: 2px;
+      background: $white;
+      transform: translateY(-8px);
+      transition: 0.3s;
+      box-shadow: 0 8px 0 $white;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      width: 22px;
+      height: 2px;
+      background: $white;
+      transition: 0.3s;
+      transform: translateY(8px);
+    }
+    &.active {
+      &::before {
+        transform: rotate(45deg);
+        box-shadow: 0 0 0 $white;
+      }
+      &::after {
+        transform: rotate(-45deg);
+      }
+    }
+  }
+  &.active {
+    background: $orange;
+  }
+  .hideSide {
+    transition: 0.3s;
+    z-index: 100;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    padding-top: 70px;
+    top: 0px;
+    right: -100%;
+    background: $primary;
+    height: 100vh;
+    width: 250px;
+    @include media-breakpoint-down(sm) {
+      width: 100%;
+      text-align: center;
+      justify-content: center;
+      padding-top: 0;
+    }
+    a {
+      padding: 10px 10px;
+      display: block;
+      transition: all 0.3s;
+      &:hover {
+        color: $primary;
+      }
+
+      &:hover {
+        background: $orange;
+      }
+    }
+    &.active {
+      right: 0;
+    }
+  }
+  .hideBox {
+    position: fixed;
+    opacity: 0;
+    background: rgba(0, 0, 0, 0.5);
+    height: 100vh;
+    width: 100%;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    transition: 0.3s;
+    &.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+  a {
+    &.active {
+      color:$primary
+    }
+  }
 }

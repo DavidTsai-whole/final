@@ -13,7 +13,7 @@
             @click.prevent="allDelete"
             >全部刪除</a
           >
-          <div class="table-responsive-xxl" v-if="cartData.data.length !== 0">
+          <div class="table-responsive-md" v-if="cartData.data.length !== 0">
           <table
             class="table fs-4 align-middle table-borderless"
           >
@@ -110,7 +110,6 @@ export default {
     const totalPrice = ref(0)
 
     const del = ref(null)
-    // const mitt = inject('mitt')
     const axios = inject('axios')
     const mitt = inject('mitt')
     const getCart = () => {
@@ -225,120 +224,5 @@ export default {
 
     }
   }
-  /* data () {
-    return {
-      isLoading: false,
-      cartData: [],
-      tempProduct: {},
-      totalPrice: 0
-    }
-  },
-  inject: ['emitter'],
-  components: {
-    DelModal
-  },
-  methods: {
-    getCart () {
-      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/cart`
-      this.isLoading = true
-      this.$http.get(api).then((res) => {
-        if (res.data.success) {
-          this.cartData = res.data.data.carts
-          this.getTotalPrice()
-          this.isLoading = false
-        }
-      })
-    },
-    delSingle (item) {
-      this.tempProduct = { ...item }
-      this.$refs.del.openModal()
-    },
-    updateDelete (id) {
-      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/cart/${id}`
-      this.isLoading = true
-      this.$http.delete(api).then((res) => {
-        if (res.data.success) {
-          this.isLoading = false
-          this.getCart()
-          this.$sweetalert2(res)
-          this.getTotalPrice()
-          this.emitter.emit('update-cart')
-        }
-      })
-      this.$refs.del.hideModal()
-    },
-    allDelete () {
-      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/carts`
-      this.isLoading = true
-      this.$http.delete(api).then((res) => {
-        if (res.data.success) {
-          this.$sweetalert2(res)
-          this.emitter.emit('update-cart')
-          this.isLoading = false
-          this.getCart()
-        }
-      })
-    },
-    getTotalPrice () {
-      const vm = this
-      vm.totalPrice = 0
-      vm.cartData.forEach((item) => {
-        this.totalPrice += item.total
-      })
-    },
-    addQty (item) {
-      this.isLoading = true
-      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/cart/${item.id}`
-      item.qty += 1
-      const cart = {
-        product_id: item.id,
-        qty: item.qty
-      }
-      this.$http.put(api, { data: cart }).then((res) => {
-        if (res.data.success) {
-          this.$sweetalert2(res)
-          this.getCart()
-          this.isLoading = false
-        }
-      })
-    },
-    reduceQty (item) {
-      this.isLoading = true
-      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/cart/${item.id}`
-      item.qty -= 1
-      const cart = {
-        product_id: item.id,
-        qty: item.qty
-      }
-      this.$http.put(api, { data: cart }).then((res) => {
-        if (res.data.success) {
-          this.$sweetalert2(res)
-          this.getCart()
-          this.isLoading = false
-        }
-      })
-    },
-    updateCart (item) {
-      this.isLoading = true
-      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/cart/${item.id}`
-      const cart = {
-        product_id: item.id,
-        qty: item.qty
-      }
-      this.$http.put(api, { data: cart }).then((res) => {
-        if (res.data.success) {
-          this.$sweetalert2(res)
-          this.getCart()
-          this.isLoading = false
-        }
-        if (res.data.success && item.qty === 0) {
-          this.updateDelete(item.id)
-        }
-      })
-    }
-  },
-  created () {
-    this.getCart()
-  } */
 }
 </script>

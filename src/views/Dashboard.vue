@@ -53,13 +53,39 @@
 </template>
 
 <script>
+import { inject, onMounted } from '@vue/runtime-core'
+import { useRouter } from 'vue-router'
 export default {
-  data () {
-    return {
-      toggle: 'product'
+  setup () {
+    const axios = inject('axios')
+    const router = useRouter()
+    const logout = () => {
+      const api = `${process.env.VUE_APP_URL}logout`
+      axios.post(api).then(res => {
+        router.push('/login')
+      })
     }
-  },
-  methods: {
+
+    onMounted(() => {
+      const token = document.cookie.replace(
+        /(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/,
+        '$1'
+      )
+      axios.defaults.headers.common.Authorization = token
+      const api = `${process.env.VUE_APP_URL}api/user/check`
+      axios.post(api).then(res => {
+        if (!res.data.success) {
+          router.push('/login')
+        }
+      })
+    })
+
+    return {
+      logout
+    }
+  }
+
+  /* methods: {
     logout () {
       const api = `${process.env.VUE_APP_URL}logout`
       this.$http
@@ -91,6 +117,6 @@ export default {
       .catch((error) => {
         console.log(error)
       })
-  }
+  } */
 }
 </script>

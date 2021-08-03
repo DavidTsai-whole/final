@@ -10,11 +10,6 @@ export default {
   setup () {
     provide('mitt', emitter)
   }
-  /* provide () {
-    return {
-      emitter
-    }
-  } */
 }
 </script>
 

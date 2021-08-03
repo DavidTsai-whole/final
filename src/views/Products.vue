@@ -5,7 +5,7 @@
     <div class="container mt-5">
       <div class="row">
         <div class="col-lg-4">
-        <div class="left sticky-top">
+        <div class="left sticky-top" style="top:85px">
         <div class="accordion accordionCategory my-2" id="accordionExample">
             <div class="accordion-item">
               <h2 class="accordion-header" id="headingOne">
@@ -259,135 +259,6 @@ export default {
       favoriteData
     }
   }
-  /* data () {
-    return {
-      products: [],
-      isLoading: false,
-      category: 'all',
-      selected: '1',
-      filterText: '',
-      favoriteData: JSON.parse(localStorage.getItem('favorite')) || []
-    }
-  },
-  inject: ['emitter'],
-  methods: {
-    getProducts () {
-      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/products/all`
-      this.isLoading = true
-      this.$http.get(api).then((res) => {
-        if (res.data.success) {
-          this.isLoading = false
-          this.products = res.data.products
-        }
-      })
-    },
-    addCart (item) {
-      const api = `${process.env.VUE_APP_URL}api/${process.env.VUE_APP_PATH}/cart`
-      const cartData = {
-        product_id: item.id,
-        qty: 1
-      }
-      this.isLoading = true
-      this.$http.post(api, { data: cartData }).then(res => {
-        if (res.data.success) {
-          this.$sweetalert2(res)
-          this.emitter.emit('update-cart')
-          this.isLoading = false
-        }
-      })
-    },
-    productDetail (item) {
-      this.$router.push(`/product/${item.id}`)
-    },
-    addFavorite (id) {
-      const followId = this.favoriteData.indexOf(id)
-      if (followId === -1) {
-        this.favoriteData.push(id)
-        this.$sweetalert('已加入追蹤')
-      } else {
-        this.favoriteData.splice(followId, 1)
-        this.$sweetalert('已取消追蹤')
-      }
-      localStorage.setItem('favorite', JSON.stringify(this.favoriteData))
-      this.emitter.emit('update-favorite')
-    }
-  },
-  computed: {
-    filterProduct () {
-      const newFilter = []
-      const vm = this
-      if (vm.category === 'all') {
-        return vm.products
-          .filter(item => {
-            return item.title.match(vm.filterText)
-          })
-          .sort((a, b) => {
-            if (vm.selected === '2') {
-              return a.price - b.price
-            }
-            if (vm.selected === '3') {
-              return b.price - a.price
-            }
-          })
-      } else if (vm.category === 'burger') {
-        vm.products.forEach(item => {
-          if (item.category === '漢堡') {
-            newFilter.push(item)
-          }
-        })
-        return newFilter
-          .sort((a, b) => {
-            if (vm.selected === '2') {
-              return a.price - b.price
-            }
-            if (vm.selected === '3') {
-              return b.price - a.price
-            }
-          })
-          .filter(item => {
-            return item.title.match(vm.filterText)
-          })
-      } else if (vm.category === 'dessert') {
-        vm.products.forEach(item => {
-          if (item.category === '點心') {
-            newFilter.push(item)
-          }
-        })
-        return newFilter
-          .sort((a, b) => {
-            if (vm.selected === '2') {
-              return a.price - b.price
-            }
-            if (vm.selected === '3') {
-              return b.price - a.price
-            }
-          })
-          .filter(item => {
-            return item.title.match(vm.filterText)
-          })
-      } else {
-        vm.products.forEach(item => {
-          if (item.category === '飲品') {
-            newFilter.push(item)
-          }
-        })
-        return newFilter
-          .sort((a, b) => {
-            if (vm.selected === '2') {
-              return a.price - b.price
-            }
-            if (vm.selected === '3') {
-              return b.price - a.price
-            }
-          })
-          .filter(item => {
-            return item.title.match(vm.filterText)
-          })
-      }
-    }
-  },
-  created () {
-    this.getProducts()
-  } */
+
 }
 </script>

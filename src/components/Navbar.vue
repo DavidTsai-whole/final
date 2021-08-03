@@ -1,16 +1,42 @@
 <template>
-  <nav class="nav fixed-top" :class="classList.data.bg">
+  <nav class="nav fixed-top bg-orange">
     <div
       class="container-fluid d-flex align-items-center justify-content-between"
     >
       <router-link
         to="/"
-        class="h1 fw-bold font-family-indie-flower"
-        :class="classList.data.text"
+        class="h1 fw-bold font-family-indie-flower" :class="{active:idx === 0}"
         >CHILLBURGER</router-link
       >
-      <ul class="menu d-flex list-unstyled fw-bold fs-5 mb-0" @click="toggleIcon" :class="{active:isLoading}">
+      <ul class="menu d-lg-flex d-none list-unstyled fw-bold fs-5 mb-0">
         <li>
+          <router-link to="/products" :class="{active:idx === 3}"><i class="bi bi-grid-fill"></i> 商品列表</router-link>
+        </li>
+        <li>
+          <router-link to="/about" :class="{active:idx === 2}"><i class="bi bi-chat-dots"></i> 關於我們</router-link>
+        </li>
+        <li>
+          <router-link to="/question" :class="{active:idx === 1}"
+            ><i class="bi bi-question-circle"></i> 常見問題</router-link
+          >
+        </li>
+        <!-- <li class="d-lg-none">
+          <router-link to="/cart"
+            ><i class="bi bi-cart"></i> 購物車<span>
+              ({{ cartData.data.length }})</span
+            ></router-link
+          >
+        </li>
+        <li class="d-lg-none">
+          <router-link to="/favorite"
+            ><i class="bi bi-heart-fill"></i> 商品清單<span>
+              ({{ favoriteData.data.length }})</span
+            ></router-link
+          >
+        </li> -->
+      </ul>
+       <ul class="hideSide list-unstyled fw-bold fs-5 mb-0" @click="toggleIcon" :class="{active:isLoading}">
+         <li>
           <router-link to="/products"><i class="bi bi-grid-fill"></i> 商品列表</router-link>
         </li>
         <li>
@@ -35,26 +61,27 @@
             ></router-link
           >
         </li>
-      </ul>
+         </ul>
       <ul class="menu-icon d-lg-flex list-unstyled fs-5 mb-0 d-none">
         <li>
-          <router-link to="/cart"><i class="bi bi-cart"></i></router-link
+          <router-link to="/cart" :class="{active:idx === 4}"><i class="bi bi-cart"></i></router-link
           ><span class="cartNum" v-if="cartData.data.length !== 0">{{
             cartData.data.length
           }}</span>
         </li>
         <li>
-          <router-link to="/favorite"
+          <router-link to="/favorite" :class="{active:idx === 5}"
             ><i class="bi bi-heart-fill ms-2"></i></router-link
           ><span class="favoriteNum">{{ favoriteData.data.length }}</span>
         </li>
       </ul>
-      <span class="d-lg-none text-white ms-auto me-2 zindex-1">Menu</span>
+      <span class="d-lg-none text-white ms-auto me-2 zindex-101">Menu</span>
       <div
         class="menu-toggle d-lg-none"
         @click="toggleIcon"
         :class="{active:isLoading}"
       ></div>
+      <div class="hideBox" @click="toggleIcon" :class="{show:isLoading}"></div>
     </div>
   </nav>
 </template>
@@ -67,6 +94,8 @@ import { useRoute } from 'vue-router'
 export default {
   setup () {
     const isLoading = ref(false)
+    const idx = ref(0)
+    const routerArr = ['', 'question', 'about', 'products', 'cart', 'favorite']
     const classList = reactive({
       data: {}
     })
@@ -76,18 +105,24 @@ export default {
     const favoriteData = reactive({
       data: JSON.parse(localStorage.getItem('favorite')) || []
     })
+    watch(isLoading, () => {
+      if (isLoading.value === true) {
+        document.body.style['overflow-y'] = 'hidden'
+      } else {
+        document.body.style['overflow-y'] = 'auto'
+      }
+    })
     const mitt = inject('mitt')
     const axios = inject('axios')
 
     const route = useRoute()
     watch(() => route.path, () => {
-      if (route.path !== '/') {
-        classList.data.bg = 'bg-orange'
-        classList.data.text = 'text-primary'
-      } else {
-        classList.data.bg = ''
-        classList.data.text = ''
-      }
+      routerArr.forEach((item, index) => {
+        const rp = route.path.substr(1)
+        if (item === rp) {
+          idx.value = index
+        }
+      })
     })
     const toggleIcon = () => {
       isLoading.value = !isLoading.value
@@ -117,7 +152,8 @@ export default {
       getCart,
       classList,
       favoriteData,
-      cartData
+      cartData,
+      idx
     }
   }
 /*
