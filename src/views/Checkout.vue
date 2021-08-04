@@ -7,7 +7,7 @@
         <div class="col-md-7 order-md-0 order-1 mt-md-0 mt-5">
           <h2 class="fw-bold">訂購人資訊</h2>
           <hr class="bg-dark" style="opacity: 1" />
-          <Form v-slot="{ errors }">
+          <Form v-slot="{ errors }" @submit="toOrder">
             <div class="mb-2">
               <label for="email" class="form-label fw-bold"
                 ><span class="text-danger">*</span> Email</label
@@ -81,7 +81,7 @@
               <a href="#/cart" class="btn-custom2 hvr-shutter-out-horizontal my-2"
                 >上一步</a
               >
-              <a href="#" class="btn-custom hvr-bounce-to-right my-2" @click.prevent="toOrder">下一步</a>
+              <button type="submit" class="btn btn-lg btn-outline-primary fw-bold btn-custom hvr-bounce-to-right my-2">下一步</button>
             </div>
           </Form>
         </div>

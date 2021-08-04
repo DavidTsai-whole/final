@@ -95,6 +95,7 @@ import { reactive, ref } from '@vue/reactivity'
 import { inject, onMounted } from '@vue/runtime-core'
 import DelModal from '@/components/DelModal.vue'
 import { useSweetalert2 } from '../composition-api/index'
+
 export default {
   components: {
     DelModal

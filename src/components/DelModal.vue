@@ -19,7 +19,7 @@
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
             取消
           </button>
-          <button type="button" class="btn btn-danger" @click="$emit('update-delete', data.id)">確認</button>
+          <button type="button" class="btn btn-danger" @click="emit('update-delete', props.data.id)">確認</button>
         </div>
       </div>
     </div>
@@ -28,8 +28,14 @@
 <script>
 import modalMixin from '@/mixins/modal'
 export default {
+  mixins: [modalMixin],
   props: ['data'],
-  mixins: [modalMixin]
+  setup (props, { emit }) {
+    return {
+      props,
+      emit
+    }
+  }
 
 }
 </script>
