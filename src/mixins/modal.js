@@ -1,8 +1,8 @@
 import Modal from 'bootstrap/js/dist/modal'
-import { onMounted, ref } from 'vue'
+/* import { onMounted, ref } from 'vue' */
 
 export default {
-  setup () {
+  /* setup () {
     const newModal = ref('')
     const modal = ref(null)
     const openModal = () => {
@@ -19,8 +19,8 @@ export default {
       openModal,
       hideModal
     }
-  }
-  /* methods: {
+  } */
+  methods: {
     openModal () {
       this.modal.show()
     },
@@ -30,5 +30,5 @@ export default {
   },
   mounted () {
     this.modal = new Modal(this.$refs.modal)
-  } */
+  }
 }

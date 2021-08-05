@@ -19,21 +19,21 @@
           >
             <thead class="border-bottom border-dark">
               <tr>
-                <th>產品圖片</th>
+                <th class="none" width="20%">產品圖片</th>
                 <th>產品名稱</th>
-                <th>數量</th>
+                <th width="30%">數量</th>
                 <th>價格</th>
                 <th>刪除</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="item in cartData.data" :key="item.id" class="border-bottom">
-                <td>
+                <td class="none">
                   <img :src="item.product.imageUrl" alt="" />
                 </td>
                 <td>{{ item.product.title }}</td>
                 <td>
-                  <div class="btn-group" role="group" aria-label="Basic example">
+                  <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
                     <button
                       type="button"
                       @click="reduceQty(item)"

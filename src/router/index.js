@@ -2,6 +2,10 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
   {
+    path: '/:pathMatch(.*)*',
+    redirect: '/'
+  },
+  {
     path: '/',
     component: () => import('../views/Front.vue'),
     children: [
