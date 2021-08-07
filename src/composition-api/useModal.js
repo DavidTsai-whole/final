@@ -1,8 +1,9 @@
 import Modal from 'bootstrap/js/dist/modal'
-import { onMounted, ref } from 'vue'
+import { ref, watch } from 'vue'
 
-export function modal (modal) {
+export function useModal (modal) {
   const newModal = ref('')
+
   const openModal = () => {
     newModal.value.show()
   }
@@ -10,7 +11,10 @@ export function modal (modal) {
     newModal.value.hide()
   }
 
-  onMounted(() => {
+  watch(modal, () => {
+    if (modal.value) {
+      return
+    }
     newModal.value = new Modal(modal)
   })
   return {

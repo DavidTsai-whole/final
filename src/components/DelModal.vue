@@ -26,18 +26,19 @@
   </div>
 </template>
 <script>
-/* import { ref } from '@vue/reactivity'
-import { useModal } from '../composition-api' */
-import modalMixin from '@/mixins/modal'
+import { ref } from '@vue/reactivity'
+import { useModal } from '../composition-api/useModal'
 export default {
   props: ['data'],
-  mixins: [modalMixin],
   setup (props, { emit }) {
-    /* const modal = ref(null)
-    useModal(modal.value) */
+    const modal = ref(null)
+    const { openModal, hideModal } = useModal(modal)
     return {
+      modal,
       props,
-      emit
+      emit,
+      openModal,
+      hideModal
     }
   }
 
